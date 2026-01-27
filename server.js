@@ -1,14 +1,38 @@
-const http = require('http');
+const exprees = require('exprees');
+const path = require('path');
+const { title } = require('process');
+const fs = require('fs');
 
-const HOSTNAME = '127.0.0.1';
+const app = exprees();
 const PORT = 3000;
 
-const server = http.createServer((req, res) => {
-    res.statusCode = 200;
-    res.setHeader('Content-Type', 'text/plain; charset=utf-8');
-    res.end('hello world');
+app.set('views', path.join(__dirname, 'src/views'));
+app.set('view engine', 'ejs');
+app.use(exprees.static(path.join(__dirname, 'public')))
+
+const getMovies = () => {
+    const data = fs.readFileSync
+    (path.join(__dirname, 'src/data/movies.json'));
+    return JSON.parse(data);
+};
+
+app.get('/', (req, res) => {
+    const movies = getMovies();
+    res.render('index', { title: 'movieswebsite', movies});
 });
 
-server.listen(PORT, HOSTNAME, () => {
-    console.log(`Server keyrir á http://${HOSTNAME}:${PORT}`);
+
+app.get('/movie/id', (req, res) => {
+    const movies = getMovies();
+    const movie = movies.find(m => m.id === req.params.id);
+
+    if (!movie) {
+        return res.status(404).render('404', { title: 'website not found'});
+    }
+
+    res.render('movies-details', { title: movie.title});
+});
+
+app.listen(PORT, () => {
+    console.log(`server drivers on http://localhost${PORT}`);
 });

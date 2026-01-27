@@ -1,6 +1,14 @@
 <&- include('partials/header') &>
-
-<section class="intro">
-    <p>i like to raed books</p>
-    <p>mistborn is peak</p>
-</section>
+<main>
+    <h1>popular movies</h1>
+    <div class="movie-grid">
+        <div class="movie-card"></div>
+        <& movies.forEach(movie => { &>
+            <img src="<% movie.image" %> alt="<&= movie.title &>">
+            <h3><&= movie.title &></h3>
+            <p><&= movie.year &></p>
+            <a href="/movie/<&= movie.id">read details about the movie</a>
+            </div>
+        })
+    </div>
+</main>
