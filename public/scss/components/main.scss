@@ -1,0 +1,16 @@
+@use 'variables' as *;
+@use 'base/reset';
+@use 'components/movie-card';
+
+body {
+    background-color: $priamry-color;
+    color: $text-light;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+.movie-grid {
+    display: grid
+    grid-template-colums; repeat(auto-fill, minmax(200px, 1fr))
+    gap: 2rem;
+    padding: 2rem 0;
+}

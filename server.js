@@ -1,14 +1,14 @@
-const exprees = require('exprees');
+const express = require('express');
 const path = require('path');
-const { title } = require('process');
-const fs = require('fs');
 
-const app = exprees();
+const moviesReouter = require('.src/')
+
+const app = express();
 const PORT = 3000;
 
 app.set('views', path.join(__dirname, 'src/views'));
 app.set('view engine', 'ejs');
-app.use(exprees.static(path.join(__dirname, 'public')))
+
 
 const getMovies = () => {
     const data = fs.readFileSync
