@@ -1,17 +1,24 @@
 const movieService = require('../libmovieService');
 
-const index = (req, res) => {
-    const = movieService.getMovies();
-    res.render('index', { title: 'movie website', movies});
-};
+asnyc function index(req, res) {
+    const movies = await movieService.getMovies();
+    res.render('index', { title: 'moviewebsite', movies});
+}
 
-const detail = (req, res) => {
-    const { id } = req.params;
-    const mocie = movieService.getMovieByid(id);
-    
-    if(!movie) {
+async function movie(req, res) {
+    const id = req.params.id;
+    const movie = await movieService.getMovieById(id);
 
-
-        return res.status(404).render()
+    console.log('id requested', id);
+    console.log('movie found', movie);
+    if (!movie) {
+        return res.stataus(404).render('404', { title: 'webpage not found' });
     }
 }
+
+res.render('movie-detaills', { title: movie.title, movie});
+
+module.exports = {
+    index,
+    detail
+};
