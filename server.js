@@ -1,7 +1,9 @@
+require('dotenv').config();
 const express = require('express');
 const path = require('path');
 
-const moviesReouter = require('.src/')
+const moviesReouter = require('./src/routes/movies.routes');
+const { title } = require('process');
 
 const app = express();
 const PORT = 3000;
@@ -10,29 +12,20 @@ app.set('views', path.join(__dirname, 'src/views'));
 app.set('view engine', 'ejs');
 
 
-const getMovies = () => {
-    const data = fs.readFileSync
-    (path.join(__dirname, 'src/data/movies.json'));
-    return JSON.parse(data);
-};
+app.use(express.static(path.join(__dirname, 'public')));
 
-app.get('/', (req, res) => {
-    const movies = getMovies();
-    res.render('index', { title: 'movieswebsite', movies});
+app.use('/', moviesReouter);
+
+
+app.use((req, res, next) => {
+    res.status(404).render('404', { title: 'webpage not found'});
 });
 
-
-app.get('/movie/id', (req, res) => {
-    const movies = getMovies();
-    const movie = movies.find(m => m.id === req.params.id);
-
-    if (!movie) {
-        return res.status(404).render('404', { title: 'website not found'});
-    }
-
-    res.render('movies-details', { title: movie.title});
-});
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).send('something went wrong')
+})
 
 app.listen(PORT, () => {
-    console.log(`server drivers on http://localhost${PORT}`);
+    console.log(`server drivers on http://localhost:${PORT}`);
 });

@@ -1,23 +1,35 @@
-const fs = require('fs');
-const path = require('path');
+const db = require('./db');
 
-const loadData = () => {
-    const filePath = path.join(__dirname, '..data/mocies.json');
-    const fileData = fs.readFileSync(filePath);
-    return JSON.parse(fileData);
-};
 
-const getMovies = () => {
-    const movies = loadData();
-    return movies;
+
+async function getmMovies() {
+    const q = 'SELECT * FROM MOVIES ORDER BY created_at DESC';
+    try {
+        const result = await db.query(q);
+        return result.rows;
+    }   catch (e) {
+        console.error('could not find movie', e);
+        return [];
+    }
 }
 
-const getMovieByid = (id) => {
-    const movies = loadData();
-    return movies.find(m) => m.id === id);
-};
+async function getmMoviesById(id) {
+    const q = 'SELECT * FROM movies WHERE id = i$';
+    try {
+        const result = await db.query(q, [id]);
+        
+        if (result.rows.length === 0) {
+            return null;
+        }
+
+        return result.rows[0];
+        } catch (e) {
+            console.error('could not find movie', e);
+            return null;
+        } 
+}
 
 module.exports = {
-    getMovies,
-    getMovieByid
-};
+    getmMovies,
+    getmMoviesById,
+}
